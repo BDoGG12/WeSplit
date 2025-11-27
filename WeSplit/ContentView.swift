@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     let tipPercentages = [10, 15, 20, 25, 0]
+    @State private var selectZeroTip = false
     var totalPerPerson: Double {
         // calculate the total per person
         let peopleCount = Double(numberOfPeople)
@@ -59,6 +60,7 @@ struct ContentView: View {
                         }
                     }
                     .pickerStyle(.navigationLink)
+                    .onChange(of: tipPercentage, toggleSelectZeroTip)
                     
                 }
                 
@@ -68,6 +70,7 @@ struct ContentView: View {
                 
                 Section("Total Check Amount") {
                     Text(totalAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .foregroundStyle(selectZeroTip ? Color.red : .primary)
                 }
             }
             .navigationTitle(Text("WeSplit"))
@@ -78,6 +81,14 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+    }
+    
+    func toggleSelectZeroTip() {
+        if self.tipPercentage == 0 {
+            self.selectZeroTip = true
+        } else {
+            self.selectZeroTip = false
         }
     }
 }
